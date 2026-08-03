@@ -1,7 +1,7 @@
 # Git Add a folder to Github repo
 ## Step 1: Need to configure git email and user name using
     `git config --global user.email "sivadahrshanxxx@gmail.com"`
-    `git config --global user.id "dharshanxxx"`
+    `git config --global user.name "dharshanxxx"`
 
 ## Step 2: Initialize Git
 It creates a hidden .git file to start tracking changes
