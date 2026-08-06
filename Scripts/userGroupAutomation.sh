@@ -14,7 +14,7 @@ do
     if id "$username" &>/dev/null; then
         echo "User '$username' exists."
     else
-        sudo useradd -m "$username"
+        useradd -m "$username"
         echo "User '$username' has been created."
         break
     fi
