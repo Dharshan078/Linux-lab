@@ -14,10 +14,16 @@ fi
 while true
 do
     read -p "Enter Username to delete: " username
+    
     if id "$username" &>/dev/null; then
-        userdel -r $username
-        echo "User $username has been Deleted"
-        break
+        read -p "Do you really want to delete $username (y/n):" confirm
+        if [[ $confirm == 'y' || $confirm == 'Y' ]]; then
+            userdel -r "$username"
+            echo "User $username has been Deleted"
+            break
+        else
+            echo "User Deletion Cancelled"
+        fi
     else
         echo "User not exist to delete"
     fi

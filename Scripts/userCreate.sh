@@ -21,7 +21,14 @@ do
     else
         useradd -m "$username"
         passwd "$username"
-        echo "User '$username' has been created."
+        echo "======================================================"
+        echo "User Created Successfully"
+        echo "======================================================"
+        echo ""
+        echo "Username: $username"
+        echo "Home    : /home/$username"
+        echo ""
+        echo "======================================================"
         break
     fi
 done
