@@ -3,7 +3,7 @@
 ############################################################
 # Linux Health Monitor Script in Python
 # Author: Dharshan
-# Version: 1.0
+# Version: 1.1
 ############################################################
 
 # Things to print Hostname, Username, Time, Kernel version, CPU Usage, RAM Usage, Disk Usage, Top 5 process
