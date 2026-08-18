@@ -27,6 +27,17 @@ boot_datetime = datetime.datetime.fromtimestamp(boot_time)
 uptime_seconds = time.time() - boot_time
 uptime_duration = datetime.timedelta(seconds=uptime_seconds)
 
+CPU_USAGE = psutil.cpu_percent(interval=0.1)
+if CPU_USAGE > 80:
+    print(f"CPU > {CPU_USAGE}% -> WARNING")
+
+RAM_USAGE = float(((memory.total-memory.available)/memory.total)*100)
+if RAM_USAGE > 85:
+    print(f"RAM > {RAM_USAGE}% -> WARNING")
+
+DISK_USAGE = disk
+print(DISK_USAGE)
+
 #print statements
 print("="*60)
 print("                  LINUX SERVER HEALTH REPORT")
@@ -40,7 +51,7 @@ print("UP Time  :", uptime_duration)
 
 print("\nCPU")
 print("---")
-print(f"Overall CPU Usage   :{psutil.cpu_percent(interval=1)}%")
+print(f"Overall CPU Usage   :{psutil.cpu_percent(interval=0.1)}%")
 print(f"Physical CPU Cores  :{psutil.cpu_count(logical=False)}")
 print(f"Logical CPUs        :{psutil.cpu_count(logical=True)}")
 print(f"Per CPU Usage       :{psutil.cpu_percent(interval=0.1, percpu=True)}")
