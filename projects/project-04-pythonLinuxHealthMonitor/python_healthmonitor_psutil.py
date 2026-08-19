@@ -15,7 +15,14 @@ def bytes_to_gb(value):
     return round(value / (1024 ** 3), 2)
 def bytes_to_mb(value):
     return round(value / (1024 ** 2), 2)
-
+def warningfn(warningpercent):
+    if warningpercent >= 85 and warningpercent < 90:
+        return "⚠ WARNING"
+    elif warningpercent >= 90:
+        return "⚠ CRITICAL"
+    else:
+        return "✓ OK"
+        
 #variables
 hostname = socket.gethostname()
 memory = psutil.virtual_memory()
@@ -27,21 +34,26 @@ boot_datetime = datetime.datetime.fromtimestamp(boot_time)
 uptime_seconds = time.time() - boot_time
 uptime_duration = datetime.timedelta(seconds=uptime_seconds)
 
-CPU_USAGE = psutil.cpu_percent(interval=0.1)
-if CPU_USAGE > 80:
-    print(f"CPU > {CPU_USAGE}% -> WARNING")
-
-RAM_USAGE = float(((memory.total-memory.available)/memory.total)*100)
-if RAM_USAGE > 85:
-    print(f"RAM > {RAM_USAGE}% -> WARNING")
-
-DISK_USAGE = disk
-print(DISK_USAGE)
-
 #print statements
 print("="*60)
 print("                  LINUX SERVER HEALTH REPORT")
 print("="*60)
+
+CPU_USAGE = round(psutil.cpu_percent(interval=0.1))
+print(f"\nCPU   : {CPU_USAGE}%       {warningfn(CPU_USAGE)}")
+
+RAM_USAGE = round(((memory.total-memory.available)/memory.total)*100)
+print(f"RAM    : {RAM_USAGE}%       {warningfn(RAM_USAGE)}")
+
+DISK_USAGE = round(disk.percent)
+print(f"DISK   : {DISK_USAGE}%       {warningfn(DISK_USAGE)}")
+
+if warningfn(CPU_USAGE) == "⚠ WARNING" or warningfn(RAM_USAGE) == "⚠ WARNING" or warningfn(DISK_USAGE) == "⚠ WARNING":
+    print(f"Overall Status: ⚠ WARNING")
+elif warningfn(CPU_USAGE) == "⚠ CRITICAL" or warningfn(RAM_USAGE) == "⚠ WARNING" or warningfn(DISK_USAGE) == "⚠ WARNING":
+    print(f"Overall Status: ⚠ CRITICAL")
+else:
+    print("Overall Status: ✓ OK")
 
 print("\nSystem")
 print("------")
