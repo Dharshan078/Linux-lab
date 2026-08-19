@@ -43,17 +43,17 @@ CPU_USAGE = round(psutil.cpu_percent(interval=0.1))
 print(f"\nCPU   : {CPU_USAGE}%       {warningfn(CPU_USAGE)}")
 
 RAM_USAGE = round(((memory.total-memory.available)/memory.total)*100)
-print(f"RAM    : {RAM_USAGE}%       {warningfn(RAM_USAGE)}")
+print(f"RAM   : {RAM_USAGE}%       {warningfn(RAM_USAGE)}")
 
 DISK_USAGE = round(disk.percent)
-print(f"DISK   : {DISK_USAGE}%       {warningfn(DISK_USAGE)}")
+print(f"DISK  : {DISK_USAGE}%       {warningfn(DISK_USAGE)}")
 
-if warningfn(CPU_USAGE) == "⚠ WARNING" or warningfn(RAM_USAGE) == "⚠ WARNING" or warningfn(DISK_USAGE) == "⚠ WARNING":
-    print(f"Overall Status: ⚠ WARNING")
-elif warningfn(CPU_USAGE) == "⚠ CRITICAL" or warningfn(RAM_USAGE) == "⚠ WARNING" or warningfn(DISK_USAGE) == "⚠ WARNING":
+if warningfn(CPU_USAGE) == "⚠ CRITICAL" or warningfn(RAM_USAGE) == "⚠ CRITICAL" or warningfn(DISK_USAGE) == "⚠ CRITICAL":
     print(f"Overall Status: ⚠ CRITICAL")
+elif warningfn(CPU_USAGE) == "⚠ WARNING" or warningfn(RAM_USAGE) == "⚠ WARNING" or warningfn(DISK_USAGE) == "⚠ WARNING":
+    print(f"Overall Status: ⚠ WARNING")
 else:
-    print("Overall Status: ✓ OK")
+    print(f"Overall Status: ✓ OK")
 
 print("\nSystem")
 print("------")
@@ -63,7 +63,7 @@ print("UP Time  :", uptime_duration)
 
 print("\nCPU")
 print("---")
-print(f"Overall CPU Usage   :{psutil.cpu_percent(interval=0.1)}%")
+print(f"Overall CPU Usage   :{CPU_USAGE}%")
 print(f"Physical CPU Cores  :{psutil.cpu_count(logical=False)}")
 print(f"Logical CPUs        :{psutil.cpu_count(logical=True)}")
 print(f"Per CPU Usage       :{psutil.cpu_percent(interval=0.1, percpu=True)}")
