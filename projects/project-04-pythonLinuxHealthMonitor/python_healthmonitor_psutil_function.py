@@ -13,7 +13,10 @@ def main():
     system = get_system_info()
     cpu = get_cpu_info()
     memory = get_mem_info()
-    return system, cpu, memory
+    disk = get_disk_info()
+    partition = get_partition_info()
+    netaddress = get_net_address()
+    return system, cpu, memory, disk, partition, netaddress
 
 def bytes_to_gb(value):
     return round(value / (1024 ** 3), 2)
@@ -29,10 +32,11 @@ def get_system_info():
     print("------")
     hostname = socket.gethostname()
     boottime = datetime.datetime.fromtimestamp(psutil.boot_time())
-    uptime = datetime.datetime.fromtimestamp(time.time() - psutil.boot_time())
+    uptime_seconds = time.time() - psutil.boot_time()
+    uptime = datetime.timedelta(seconds=uptime_seconds)
     print(f"Hostname:   {hostname}")
     print(f"Boottime:   {boottime.strftime("%H:%M:%S")}")
-    print(f"Uptime: {uptime.strftime("%H:%M:%S")}")
+    print(f"Uptime: {uptime}")
     return hostname, boottime, uptime
 
 def get_cpu_info():
@@ -61,5 +65,42 @@ def get_mem_info():
     print(f"Available Memory:   {bytes_to_mb(available)}MB")
     print(f"Memory Used Percent:    {mem_percent}%")
     return memory, total, usage, available, mem_percent
+
+def get_disk_info():
+    print("\nDisk")
+    print("----")
+    disk = psutil.disk_usage("/")
+    disktotal = disk.total
+    diskused = disk.used
+    diskfree = disk.free
+    diskpercent = disk.percent
+    print(f"Total Disk: {bytes_to_gb(disktotal)}GB")
+    print(f"Total Disk Usage: {bytes_to_gb(diskused)}GB")
+    print(f"Total Available Space: {bytes_to_mb(diskfree)}MB")
+    print(f"Disk Used Percent: {diskpercent}%")
+    return disk
+
+def get_partition_info():
+    print("\nPartitions")
+    print("----------")
+    for partition in psutil.disk_partitions():
+        print(f"Partition Device: {partition.device}")
+        print(f"Mount Point: {partition.mountpoint}")
+        print(f"Filesystem: {partition.fstype}")
+    return partition
+
+def get_net_address():
+    print("\nNetwork")
+    print("-------")
+    net = psutil.net_io_counters(pernic=True)
+    for interface, stats in net.items():
+        print(interface)
+        print(" Sent                     :", bytes_to_mb(stats.bytes_sent),"MB")
+        print(" Received                 :", bytes_to_mb(stats.bytes_recv),"MB")
+        print(f" Packets Sent            : {stats.packets_sent}")
+        print(f" Packets Receieved       : {stats.packets_recv}")
+        print(f" Drop                    : IN = {stats.dropin} | OUT = {stats.dropout}")
+        print(f" Error                   : IN = {stats.errin} | OUT = {stats.errout}")
+    return net
 
 main()
