@@ -16,7 +16,8 @@ def main():
     disk = get_disk_info()
     partition = get_partition_info()
     netaddress = get_net_address()
-    return system, cpu, memory, disk, partition, netaddress
+    top_process = get_top_process()
+    return system, cpu, memory, disk, partition, netaddress, top_process
 
 def bytes_to_gb(value):
     return round(value / (1024 ** 3), 2)
@@ -102,5 +103,16 @@ def get_net_address():
         print(f" Drop                    : IN = {stats.dropin} | OUT = {stats.dropout}")
         print(f" Error                   : IN = {stats.errin} | OUT = {stats.errout}")
     return net
+
+def get_top_process():
+    print("\nTop Process")
+    print("-----------")
+    processes=[]
+    for process in psutil.process_iter(["pid", "name", "cpu_percent", "memory_percent"]):
+        processes.append(process.info)
+    processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
+    for process in processes[:5]:
+        print(process)
+    return process
 
 main()
