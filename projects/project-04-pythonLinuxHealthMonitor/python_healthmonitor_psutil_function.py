@@ -45,14 +45,18 @@ def main():
 
     print("\nDisk")
     print("----")
-    disktotal = disks.total
-    diskused = disks.used
-    diskfree = disks.free
-    diskpercent = disks.percent
-    print(f"Total Disk: {bytes_to_gb(disktotal)}GB")
-    print(f"Total Disk Usage: {bytes_to_gb(diskused)}GB")
-    print(f"Total Available Space: {bytes_to_mb(diskfree)}MB")
-    print(f"Disk Used Percent: {diskpercent}%")
+    if disks is None:
+        print("Disk information unavailable.")
+    else:
+        disktotal = disks.total
+        diskused = disks.used
+        diskfree = disks.free
+        diskpercent = disks.percent
+        print(f"Total Disk: {bytes_to_gb(disktotal)}GB")
+        print(f"Total Disk Usage: {bytes_to_gb(diskused)}GB")
+        print(f"Total Available Space: {bytes_to_mb(diskfree)}MB")
+        print(f"Disk Used Percent: {diskpercent}%")
+
 
     print("\nPartitions")
     print("----------")
@@ -84,7 +88,7 @@ def main():
     for process in top_process:
         print(process)
 
-    return system, cpu, memory, disks, partition, netaddress, top_process, netinfo
+    return system, cpu, memory, disks, partitions, netaddress, top_process, netinfo
 
 def bytes_to_gb(value):
     return round(value / (1024 ** 3), 2)
@@ -110,7 +114,12 @@ def get_mem_info():
     return psutil.virtual_memory()
 
 def get_disk_info():
-    return psutil.disk_usage("/")
+    try:
+        return psutil.disk_usage("/")
+    except OSError as Error:
+        print(f"Unable to retrieve Disk information: {Error}")
+        return None
+
 
 def get_partition_info():
     partitions = []
