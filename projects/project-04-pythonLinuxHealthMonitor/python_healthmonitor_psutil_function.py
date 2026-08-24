@@ -84,13 +84,16 @@ def get_disk_info():
 def get_partition_info():
     print("\nPartitions")
     print("----------")
+    partitions = []
     for partition in psutil.disk_partitions():
-        print(f"Partition Device: {partition.device}")
-        print(f"Mount Point: {partition.mountpoint}")
-        print(f"Filesystem: {partition.fstype}")
-    return partition
+        partitions.append(partition)
+    for parition in partitions:
+        print(f"Parition Device:    ", parition.device)
+        print(f"Mount Point:    ", parition.mountpoint)
+        print(f"FileSystem:     ", partition.fstype)
+    return partitions
 
-def get_net_address():
+def get_net_info():
     print("\nNetwork")
     print("-------")
     net = psutil.net_io_counters(pernic=True)
@@ -104,6 +107,12 @@ def get_net_address():
         print(f" Error                   : IN = {stats.errin} | OUT = {stats.errout}")
     return net
 
+def get_net_addr():
+    print("\nNetwork Adresses")
+    print("---------------")
+    
+    return
+
 def get_top_process():
     print("\nTop Process")
     print("-----------")
@@ -113,6 +122,7 @@ def get_top_process():
     processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
     for process in processes[:5]:
         print(process)
-    return process
+    top_processes = processes[:5]
+    return top_processes
 
 main()
