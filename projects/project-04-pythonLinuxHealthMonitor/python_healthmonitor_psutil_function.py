@@ -1,15 +1,24 @@
 #########################################################
 # Linux Server Health Report Script with psutil function
 # Author: Sivadharshan
-# Version: 2.3
+# Version: 2.4
 #########################################################
 
 import psutil
 import time
 import datetime
 import socket
+import logging
+
+logging.basicConfig(
+    filename="health_monitor.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 
 def main():
+    logging.info("Linux health monitoring started")
     print("="*60)
     print("                  LINUX SERVER HEALTH REPORT")
     print("="*60)
@@ -88,7 +97,7 @@ def main():
     for process in top_process:
         print(process)
 
-    return system, cpu, memory, disks, partitions, netaddress, top_process, netinfo
+    logging.info("Linux health monitoring completed")
 
 def bytes_to_gb(value):
     return round(value / (1024 ** 3), 2)
@@ -116,8 +125,8 @@ def get_mem_info():
 def get_disk_info():
     try:
         return psutil.disk_usage("/")
-    except OSError as Error:
-        print(f"Unable to retrieve Disk information: {Error}")
+    except OSError:
+        logging.exception(f"Unable to retrieve disk information")
         return None
 
 
@@ -141,4 +150,5 @@ def get_top_process():
     top_processes = processes[:5]
     return top_processes
 
-result = main()
+if __name__ == "__main__":
+    main()
