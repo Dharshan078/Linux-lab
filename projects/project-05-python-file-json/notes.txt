@@ -1,0 +1,5 @@
+Linux
+Python
+AWS
+Terraform
+Cloud Engineering
