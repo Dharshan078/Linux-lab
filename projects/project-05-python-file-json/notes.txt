@@ -1,5 +1,4 @@
-Linux
-Python
-AWS
-Terraform
-Cloud Engineering
+Linux,Technical Foundation
+Python,Automation
+AWS,Cloud
+Terraform,IaC
