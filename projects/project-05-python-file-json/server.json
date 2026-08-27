@@ -1,0 +1,8 @@
+{
+    "hostname": "sivadharshan",
+    "ram": "35%",
+    "cpu": "62%",
+    "status": "running",
+    "os": "ubuntu",
+    "environment": "production"
+}
