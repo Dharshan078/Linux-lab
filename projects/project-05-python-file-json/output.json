@@ -1,0 +1,7 @@
+{
+    "hostname": "web-server-01",
+    "environment": "production",
+    "status": "running",
+    "cpu": 45,
+    "memory": 62
+}

@@ -1,0 +1,18 @@
+{
+    "server-1":
+    {
+        "hostname": "web-server-01",
+        "environment": "production",
+        "status": "running",
+        "cpu": 45,
+        "memory": 62
+    },
+    "server-2":
+    {
+        "hostname": "web-server-02",
+        "environment": "production",
+        "status": "stopped",
+        "cpu": 0,
+        "memory": 0
+    }
+}
