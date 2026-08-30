@@ -3,7 +3,7 @@
 ############################################################
 # Linux Health Monitor Script in Python with functions
 # Author: Dharshan
-# Version: 1.0
+# Version: 1.2
 ############################################################
 
 import subprocess
