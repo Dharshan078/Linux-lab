@@ -5,7 +5,8 @@
 # 1.0: Raw code just to print the instance information
 # 1.1: Added functions, Clean code
 # 1.2: Added try and exceptions [Clinet and BotoCore Error]
-# 1.3: Using filter
+# 1.3: Using filter to filter out only running EC2 instances
+# 1.4: Pagination started
 #########################################################
 
 
@@ -14,11 +15,11 @@ from botocore.exceptions import ClientError, BotoCoreError
 
 def main():
     print("="*40)
-    print("EC2 INSTANCE INVENTORY")
+    print("RUNNING EC2 INSTANCE INVENTORY")
     print("="*40)
     get_instance = get_instances()
     if not get_instance:
-        print("No EC2 instances found")
+        print("No running EC2 instances found")
         return
     else:
          for instance in get_instance:
@@ -33,7 +34,13 @@ def main():
 def get_instances():
     try:
         ec2 = boto3.client("ec2")
-        response = ec2.describe_instances()
+        instance_filter = [
+            {
+                'Name': 'instance-state-name',
+                'Values': ['running']
+            },
+        ]
+        response = ec2.describe_instances(Filters=instance_filter)
         return response["Reservations"]
     except ClientError as error:
         print(f"AWS API error: {error}")
