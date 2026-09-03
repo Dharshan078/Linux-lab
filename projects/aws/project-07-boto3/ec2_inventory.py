@@ -17,12 +17,13 @@ def main():
     print("="*40)
     print("RUNNING EC2 INSTANCE INVENTORY")
     print("="*40)
-    get_instance = get_instances()
-    if not get_instance:
+    reservations, total_pages = get_instances()
+    if not reservations:
         print("No running EC2 instances found")
+        print("Total Pages = ", total_pages)
         return
     else:
-         for instance in get_instance:
+         for instance in reservations:
             print("Reservation ID   :",instance["ReservationId"])
             for instances in instance["Instances"]:
                 print("Instance ID      :",instances["InstanceId"])
@@ -30,6 +31,7 @@ def main():
                 print("Instance State   :",instances["State"]["Name"])
                 print("Private IP       :",instances.get("PrivateIpAddress","N/A"))
                 print("Availability Zone:",instances["Placement"]["AvailabilityZone"])
+            print("Total Pages = ", total_pages)
           
 def get_instances():
     try:
@@ -38,10 +40,16 @@ def get_instances():
             {
                 'Name': 'instance-state-name',
                 'Values': ['running']
-            },
+            }, 
         ]
         response = ec2.describe_instances(Filters=instance_filter)
-        return response["Reservations"]
+        reservations = response["Reservations"]
+        paginator = ec2.get_paginator("describe_instances")
+        total_pages = 0
+        for page in paginator.paginate():
+            reservations = page["Reservations"]
+            total_pages += 1
+        return reservations, total_pages
     except ClientError as error:
         print(f"AWS API error: {error}")
         return []
