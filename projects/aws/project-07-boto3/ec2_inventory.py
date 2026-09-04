@@ -42,17 +42,17 @@ def get_instances():
                 'Values': ['running']
             }, 
         ]
-        response = ec2.describe_instances(Filters=instance_filter)
-        reservations = response["Reservations"]
         paginator = ec2.get_paginator("describe_instances")
         total_pages = 0
-        for page in paginator.paginate():
+        all_reservations = []
+        for page in paginator.paginate(Filters=instance_filter):
             reservations = page["Reservations"]
+            all_reservations.extend(reservations)
             total_pages += 1
-        return reservations, total_pages
+        return all_reservations, total_pages
     except ClientError as error:
         print(f"AWS API error: {error}")
-        return []
+        return [], None
     except BotoCoreError as error:
         print(f"Boto3 error: {error}")
 
